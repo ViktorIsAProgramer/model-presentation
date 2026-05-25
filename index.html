@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>模型發表會交流小聚｜初星群 Starry Dawn Circle</title>
+  <meta name="theme-color" content="#f8f3e8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f8f3e8; --cream-dark: #ede4d1; --ink: #1c1710; --ink-muted: #6b5f4a;
+      --ink-faint: #b0a48c; --gold: #c4932a; --gold-bg: rgba(196,147,42,0.08);
+      --gold-border: rgba(196,147,42,0.25); --white: #ffffff;
+      --border: rgba(28,23,16,0.12); --border-strong: rgba(28,23,16,0.22);
+      --green: #2a7a4a; --green-bg: rgba(42,122,74,0.08); --green-border: rgba(42,122,74,0.25);
+      --radius: 12px; --radius-sm: 8px;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--cream); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(248,243,232,0.9); backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 1.25rem; height: 52px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { font-family: var(--font-display); font-size: 15px; color: var(--ink); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .nav-status {
+      font-size: 12px; color: var(--ink-faint);
+      background: var(--cream-dark); border-radius: 20px;
+      padding: 4px 10px; display: flex; align-items: center; gap: 5px;
+    }
+    .nav-status .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint);
+      transition: background 0.3s;
+    }
+    .nav-status .dot.live { background: #2a7a4a; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .btn-admin {
+      font-size: 12px; color: var(--ink-muted); background: none;
+      border: 0.5px solid var(--border); border-radius: 20px;
+      padding: 4px 12px; cursor: pointer; font-family: var(--font-body);
+      transition: background 0.15s;
+    }
+    .btn-admin:hover { background: var(--cream-dark); }
+
+    /* Pages */
+    .page { display: none; padding-top: 52px; min-height: 100vh; animation: fadeUp 0.3s ease both; }
+    .page.active { display: block; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .container { max-width: 600px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 5rem 1.5rem 4rem; max-width: 600px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--white); border: 0.5px solid var(--border-strong);
+      border-radius: 20px; font-size: 12px; padding: 5px 14px;
+      color: var(--ink-muted); margin-bottom: 2rem; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .hero-badge::before { content:''; width:6px; height:6px; background:var(--gold); border-radius:50%; }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(36px,8vw,52px); font-weight:400; line-height:1.15; margin-bottom:1.25rem; }
+    .hero h1 em { font-style:italic; color:var(--gold); }
+    .hero-sub { font-size:16px; color:var(--ink-muted); line-height:1.75; max-width:380px; margin:0 auto 2.5rem; font-weight:300; }
+    .btn-cta {
+      display:inline-block; background:var(--ink); color:var(--cream);
+      padding:14px 32px; border-radius:40px; font-size:15px; font-weight:500;
+      border:none; cursor:pointer; font-family:var(--font-body);
+      transition:transform 0.15s, opacity 0.15s;
+    }
+    .btn-cta:hover { opacity:0.85; transform:translateY(-1px); }
+
+    .hero-divider { border:none; border-top:0.5px solid var(--border); margin:3rem 0 1.5rem; }
+    .hero-meta { display:flex; justify-content:center; gap:2.5rem; flex-wrap:wrap; }
+    .hero-meta-item .label { font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-faint); display:block; margin-bottom:4px; }
+    .hero-meta-item .val { font-family:var(--font-display); font-size:18px; color:var(--ink); }
+
+    /* Section header */
+    .section-header { padding: 2.5rem 0 1.5rem; border-bottom: 0.5px solid var(--border); margin-bottom: 1.75rem; }
+    .section-eyebrow { font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-faint); margin-bottom:0.5rem; }
+    .section-header h2 { font-family:var(--font-display); font-size:28px; font-weight:400; }
+    .section-header p { font-size:14px; color:var(--ink-muted); margin-top:0.4rem; font-weight:300; }
+
+    /* Current step banner */
+    .current-banner {
+      background: var(--green-bg); border: 0.5px solid var(--green-border);
+      border-radius: var(--radius-sm); padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--green); margin-bottom: 1.25rem;
+    }
+    .current-banner .dot { width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; animation:pulse 2s infinite; }
+
+    /* Step list */
+    .step-list { list-style:none; }
+    .step-item {
+      display:flex; align-items:flex-start; gap:14px;
+      padding:12px 14px; border-radius:var(--radius-sm);
+      border: 0.5px solid transparent; margin-bottom:4px;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .step-item.is-current {
+      background: var(--green-bg); border-color: var(--green-border);
+    }
+    .step-item.is-done { opacity: 0.55; }
+    .step-item.is-locked { opacity: 0.35; }
+    .step-item.is-clickable { cursor: pointer; }
+    .step-item.is-clickable:hover { background: var(--white); border-color: var(--border); }
+    .step-item.is-current.is-clickable:hover { background: rgba(42,122,74,0.12); }
+
+    .step-num {
+      width:28px; height:28px; border-radius:50%;
+      background:var(--white); border:0.5px solid var(--border-strong);
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:500; color:var(--ink-muted); flex-shrink:0;
+    }
+    .step-num.done { background:var(--ink); color:var(--cream); border-color:var(--ink); }
+    .step-num.current { background:var(--green); color:#fff; border-color:var(--green); }
+    .step-body { flex:1; }
+    .step-label { font-size:14px; color:var(--ink); font-weight:500; line-height:1.4; }
+    .step-desc { font-size:12px; color:var(--ink-muted); margin-top:3px; font-weight:300; }
+    .step-arrow { color:var(--ink-faint); font-size:16px; padding-top:5px; flex-shrink:0; }
+
+    /* Round tabs */
+    .round-tabs { display:flex; gap:6px; margin-bottom:1.5rem; flex-wrap:wrap; }
+    .round-tab {
+      padding:7px 18px; border-radius:20px; font-size:13px;
+      border:0.5px solid var(--border-strong); cursor:pointer;
+      background:transparent; color:var(--ink-muted);
+      font-family:var(--font-body); transition:all 0.15s;
+      position: relative;
+    }
+    .round-tab:hover { background:var(--white); color:var(--ink); }
+    .round-tab.active { background:var(--ink); color:var(--cream); border-color:var(--ink); }
+    .round-tab.locked { opacity:0.3; cursor:not-allowed; pointer-events:none; }
+    .round-tab .tab-live {
+      position:absolute; top:-3px; right:-3px;
+      width:8px; height:8px; border-radius:50%; background:var(--green);
+      border:1.5px solid var(--cream); animation:pulse 2s infinite;
+    }
+
+    /* Question card */
+    .q-card { background:var(--white); border:0.5px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.25rem; }
+    .q-tag { font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-faint); margin-bottom:0.75rem; }
+    .q-card h3 { font-family:var(--font-display); font-size:20px; font-weight:400; margin-bottom:0.5rem; }
+    .q-intro { font-size:13px; color:var(--ink-muted); margin-bottom:1rem; font-weight:300; line-height:1.6; }
+    .q-list { list-style:none; counter-reset:q; }
+    .q-list li {
+      counter-increment:q; display:flex; gap:12px;
+      padding:10px 0; border-bottom:0.5px solid var(--border);
+      font-size:14px; color:var(--ink); line-height:1.65; font-weight:300;
+    }
+    .q-list li:last-child { border-bottom:none; padding-bottom:0; }
+    .q-list li::before { content:counter(q); font-size:11px; color:var(--ink-faint); min-width:16px; padding-top:3px; }
+    .q-note { background:var(--gold-bg); border:0.5px solid var(--gold-border); border-radius:var(--radius-sm); padding:10px 14px; font-size:13px; color:var(--gold); margin-top:1rem; }
+    .locked-notice {
+      text-align:center; padding:3rem 1rem;
+      color:var(--ink-faint); font-size:14px; font-weight:300; line-height:1.8;
+    }
+    .locked-notice .lock-icon { font-size:28px; margin-bottom:0.75rem; }
+
+    /* Reflect */
+    .reflect-box { background:var(--white); border:0.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin:1.5rem 0; }
+    .reflect-q { padding:1.1rem 1.5rem; border-bottom:0.5px solid var(--border); font-size:15px; color:var(--ink); line-height:1.7; font-weight:300; }
+    .reflect-q:last-child { border-bottom:none; }
+    .reflect-q strong { font-weight:500; }
+
+    /* Buttons */
+    .btn-outline {
+      display:inline-block; background:transparent; color:var(--ink);
+      padding:10px 22px; border-radius:40px; font-size:14px; font-weight:500;
+      border:0.5px solid var(--border-strong); cursor:pointer;
+      font-family:var(--font-body); transition:background 0.15s; text-decoration:none;
+    }
+    .btn-outline:hover { background:var(--white); border-color:var(--ink); }
+    .btn-back { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-muted); cursor:pointer; padding:0; border:none; background:none; font-family:var(--font-body); margin-bottom:0.5rem; }
+    .btn-back:hover { color:var(--ink); }
+
+    /* Thank you */
+    .thank-hero { text-align:center; padding:4rem 1.5rem 2rem; max-width:480px; margin:0 auto; }
+    .thank-hero h2 { font-family:var(--font-display); font-size:32px; font-weight:400; margin-bottom:1rem; }
+    .thank-hero p { font-size:15px; color:var(--ink-muted); line-height:1.8; font-weight:300; }
+    .link-row { display:flex; flex-direction:column; gap:8px; margin:1.5rem 0; }
+    .link-card {
+      border:0.5px solid var(--border); border-radius:var(--radius-sm);
+      padding:13px 18px; display:flex; align-items:center; gap:12px;
+      font-size:14px; color:var(--ink); cursor:pointer; text-decoration:none;
+      background:var(--white); transition:border-color 0.15s, background 0.15s;
+    }
+    .link-card:hover { border-color:var(--border-strong); background:var(--cream-dark); }
+    .link-card .link-arrow { margin-left:auto; color:var(--ink-faint); }
+
+    hr.divider { border:none; border-top:0.5px solid var(--border); margin:2rem 0; }
+    .footer-note { text-align:center; font-size:12px; color:var(--ink-faint); padding:2rem 0 3rem; line-height:1.8; }
+
+    /* ── Admin Panel ── */
+    .admin-overlay {
+      display:none; position:fixed; inset:0; z-index:200;
+      background:rgba(28,23,16,0.5); backdrop-filter:blur(4px);
+      align-items:center; justify-content:center; padding:1.5rem;
+    }
+    .admin-overlay.open { display:flex; }
+    .admin-panel {
+      background:var(--white); border-radius:var(--radius);
+      border:0.5px solid var(--border-strong);
+      width:100%; max-width:420px;
+      animation: fadeUp 0.25s ease both;
+    }
+    .admin-header {
+      padding:1.25rem 1.5rem; border-bottom:0.5px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .admin-header h3 { font-family:var(--font-display); font-size:20px; font-weight:400; }
+    .btn-close { background:none; border:none; cursor:pointer; font-size:20px; color:var(--ink-muted); padding:4px; line-height:1; }
+    .btn-close:hover { color:var(--ink); }
+    .admin-body { padding:1.5rem; }
+
+    /* Password screen */
+    .admin-pw { }
+    .admin-pw p { font-size:14px; color:var(--ink-muted); margin-bottom:1rem; font-weight:300; }
+    .pw-input {
+      width:100%; padding:10px 14px; border:0.5px solid var(--border-strong);
+      border-radius:var(--radius-sm); font-size:15px; font-family:var(--font-body);
+      background:var(--cream); color:var(--ink); outline:none; margin-bottom:0.75rem;
+    }
+    .pw-input:focus { border-color:var(--ink); }
+    .pw-error { font-size:13px; color:#c0392b; margin-top:0.5rem; display:none; }
+    .btn-pw { width:100%; background:var(--ink); color:var(--cream); border:none; border-radius:var(--radius-sm); padding:11px; font-size:14px; font-weight:500; cursor:pointer; font-family:var(--font-body); transition:opacity 0.15s; }
+    .btn-pw:hover { opacity:0.85; }
+
+    /* Control screen */
+    .admin-controls { display:none; }
+    .ctrl-section { margin-bottom:1.75rem; }
+    .ctrl-label { font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-faint); margin-bottom:0.75rem; display:block; }
+    .ctrl-val { font-family:var(--font-display); font-size:32px; text-align:center; color:var(--ink); margin-bottom:0.5rem; }
+    .ctrl-val span { font-size:16px; color:var(--ink-muted); font-family:var(--font-body); }
+    .ctrl-name { font-size:13px; color:var(--ink-muted); text-align:center; margin-bottom:1rem; min-height:20px; }
+    .ctrl-btns { display:flex; gap:8px; }
+    .ctrl-btn {
+      flex:1; padding:10px; border:0.5px solid var(--border-strong);
+      border-radius:var(--radius-sm); background:var(--cream); color:var(--ink);
+      font-size:20px; cursor:pointer; transition:background 0.12s;
+      font-family:var(--font-body);
+    }
+    .ctrl-btn:hover { background:var(--cream-dark); }
+    .ctrl-btn:disabled { opacity:0.3; cursor:not-allowed; }
+    .ctrl-divider { border:none; border-top:0.5px solid var(--border); margin:1.5rem 0; }
+    .sync-status { font-size:12px; color:var(--ink-faint); text-align:center; padding-top:0.5rem; }
+    .sync-status.saving { color:var(--gold); }
+    .sync-status.saved { color:var(--green); }
+
+    @media(max-width:480px) {
+      .hero { padding: 3rem 1.25rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <span class="nav-brand">初星群 Starry Dawn Circle</span>
+  <div class="nav-right">
+    <div class="nav-status" id="navStatus">
+      <span class="dot" id="liveDot"></span>
+      <span id="statusText">連線中...</span>
+    </div>
+    <button class="btn-admin" onclick="openAdmin()">主持人</button>
+  </div>
+</nav>
+
+<!-- ── Page: Home ── -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">AI Product Launch · 2026</div>
+    <h1>模型發表會<br><em>交流小聚</em></h1>
+    <p class="hero-sub">一場讓開發者、研究者與使用者<br>真實交流、共同見證新模型誕生的午後聚會</p>
+    <button class="btn-cta" onclick="goTo('journey')">進入今日流程 →</button>
+    <hr class="hero-divider" />
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="label">活動日期</span><span class="val">Today</span></div>
+      <div class="hero-meta-item"><span class="label">交流輪次</span><span class="val">3 輪</span></div>
+      <div class="hero-meta-item"><span class="label">主辦</span><span class="val">初星群</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Page: Journey ── -->
+<div id="page-journey" class="page">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Today · Journey</p>
+      <h2>今日旅程指引</h2>
+      <p>跟著現場引導走就好。綠色為目前進行步驟。</p>
+    </div>
+    <div class="current-banner" id="journeyBanner">
+      <span class="dot"></span>
+      <span id="journeyBannerText">讀取中...</span>
+    </div>
+    <ul class="step-list" id="stepList">
+      <!-- generated by JS -->
+    </ul>
+    <hr class="divider" />
+    <button class="btn-outline" onclick="goTo('questions')">查看交流題目 →</button>
+    <div class="footer-note">初星群 Starry Dawn Circle</div>
+  </div>
+</div>
+
+<!-- ── Page: Questions ── -->
+<div id="page-questions" class="page">
+  <div class="container">
+    <div class="section-header">
+      <button class="btn-back" onclick="goTo('journey')">← 回今日流程</button>
+      <p class="section-eyebrow">Connect · 交流題目</p>
+      <h2>今日交流題目</h2>
+      <p>題目依輪次逐步開放，請跟著主持人節奏進行。</p>
+    </div>
+    <div class="current-banner" id="roundBanner">
+      <span class="dot"></span>
+      <span id="roundBannerText">讀取中...</span>
+    </div>
+    <div class="round-tabs" id="roundTabs">
+      <!-- generated by JS -->
+    </div>
+    <div id="roundContent">
+      <!-- generated by JS -->
+    </div>
+    <hr class="divider" />
+    <button class="btn-outline" onclick="goTo('reflect')">進入沉澱書寫 →</button>
+    <p style="margin-top:0.75rem;"><button class="btn-back" onclick="goTo('journey')">← 回今日流程</button></p>
+    <div class="footer-note">初星群 Starry Dawn Circle</div>
+  </div>
+</div>
+
+<!-- ── Page: Reflect ── -->
+<div id="page-reflect" class="page">
+  <div class="container">
+    <div class="section-header">
+      <button class="btn-back" onclick="goTo('journey')">← 回今日流程</button>
+      <p class="section-eyebrow">Reflect · 沉澱書寫</p>
+      <h2>把今天的收穫收回心裡</h2>
+      <p>先安靜停一下，讓剛才的對話慢慢落下來。</p>
+    </div>
+    <div class="reflect-box">
+      <div class="reflect-q">今天的交流裡，有沒有哪一句話、哪一個人、哪一個功能展示，讓你心裡有一點<strong>被觸動或改變</strong>？</div>
+      <div class="reflect-q">我想把今天的哪一個<strong>觀點或啟發</strong>，帶回去繼續想或繼續做？</div>
+      <div class="reflect-q">如果我<strong>明天就要用</strong>這個模型做一件事，我想做什麼？</div>
+    </div>
+    <hr class="divider" />
+    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:400;margin-bottom:0.5rem;">留下今天的回饋</h3>
+    <p style="font-size:14px;color:var(--ink-muted);font-weight:300;margin-bottom:1.25rem;line-height:1.7;">你的感受會幫助團隊把下一次活動準備得更好，大約 2–3 分鐘。</p>
+    <a class="btn-outline" href="https://forms.gle/XXXXXXXXXXXXXXXX" target="_blank">填寫今日回饋表單 →</a>
+    <hr class="divider" />
+    <button class="btn-outline" onclick="goTo('thanks')">前往感謝頁 →</button>
+    <div class="footer-note">初星群 Starry Dawn Circle</div>
+  </div>
+</div>
+
+<!-- ── Page: Thanks ── -->
+<div id="page-thanks" class="page">
+  <div class="thank-hero">
+    <h2>感謝你帶來的豐盛</h2>
+    <p>謝謝你今天來到這裡，真誠分享，也好好聽見了彼此。<br><br>願今天收到的想法與啟發，慢慢在你的工作與生活裡發酵。</p>
+  </div>
+  <div class="container">
+    <hr class="divider" />
+    <h3 style="font-family:var(--font-display);font-size:20px;font-weight:400;margin-bottom:0.5rem;">離開前的小邀請</h3>
+    <p style="font-size:14px;color:var(--ink-muted);font-weight:300;margin-bottom:1.25rem;">不用寫得很完整，只要留下此刻最真實的一點感受，就很珍貴。</p>
+    <div class="link-row">
+      <a class="link-card" href="https://forms.gle/XXXXXXXXXXXXXXXX" target="_blank">
+        <span>📋</span> 填寫今日回饋表單 <span class="link-arrow">›</span>
+      </a>
+      <a class="link-card" href="#" target="_blank">
+        <span>✨</span> 加入初星群，讓連結繼續流動 <span class="link-arrow">›</span>
+      </a>
+      <a class="link-card" href="https://line.me/R/ti/p/@XXXXXXXX" target="_blank">
+        <span>💬</span> 加入官方 LINE，接收下次活動通知 <span class="link-arrow">›</span>
+      </a>
+    </div>
+    <hr class="divider" />
+    <div class="footer-note">初星群 Starry Dawn Circle<br>謝謝你一起讓豐盛流動。</div>
+  </div>
+</div>
+
+<!-- ── Admin Overlay ── -->
+<div class="admin-overlay" id="adminOverlay" onclick="overlayClick(event)">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <h3 id="adminTitle">主持人控制台</h3>
+      <button class="btn-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="admin-body">
+
+      <!-- Password screen -->
+      <div class="admin-pw" id="adminPw">
+        <p>請輸入主持人密碼以開啟控制台</p>
+        <input class="pw-input" type="password" id="pwInput" placeholder="密碼" onkeydown="if(event.key==='Enter')checkPw()" />
+        <p class="pw-error" id="pwError">密碼錯誤，請再試一次</p>
+        <button class="btn-pw" onclick="checkPw()">確認</button>
+      </div>
+
+      <!-- Control screen -->
+      <div class="admin-controls" id="adminControls">
+
+        <div class="ctrl-section">
+          <span class="ctrl-label">目前步驟</span>
+          <div class="ctrl-val"><span id="ctrlStepNum">—</span> <span>/ 9</span></div>
+          <div class="ctrl-name" id="ctrlStepName"></div>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn" id="btnStepPrev" onclick="changeStep(-1)">←</button>
+            <button class="ctrl-btn" id="btnStepNext" onclick="changeStep(1)">→</button>
+          </div>
+        </div>
+
+        <div class="ctrl-divider"></div>
+
+        <div class="ctrl-section">
+          <span class="ctrl-label">開放交流輪次</span>
+          <div class="ctrl-val"><span id="ctrlRoundNum">—</span> <span>/ 3</span></div>
+          <div class="ctrl-name" id="ctrlRoundName"></div>
+          <div class="ctrl-btns">
+            <button class="ctrl-btn" id="btnRoundPrev" onclick="changeRound(-1)">←</button>
+            <button class="ctrl-btn" id="btnRoundNext" onclick="changeRound(1)">→</button>
+          </div>
+        </div>
+
+        <div class="sync-status" id="syncStatus">已同步</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdt0WK-CxGuezw6NB1glGFdWgy3KARVc0",
+    authDomain: "model-launch-event.firebaseapp.com",
+    databaseURL: "https://model-launch-event-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "model-launch-event",
+    storageBucket: "model-launch-event.firebasestorage.app",
+    messagingSenderId: "439342704129",
+    appId: "1:439342704129:web:ec9f32f2d606030d2a8200"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const stateRef = ref(db, 'eventState');
+
+  // ── Data ──
+  const STEPS = [
+    { label: '開場：為什麼我們今天要相聚', desc: '主持人說明今日模型發表的意義' },
+    { label: '模型 Demo 展示', desc: 'Live 展示新模型核心能力' },
+    { label: '第一輪交流題目', desc: '同色組員 3–4 人，分享使用直覺', page: 'questions', round: 0 },
+    { label: '第二輪交流題目', desc: '跨組深度對談：技術觀察 × 應用場景', page: 'questions', round: 1 },
+    { label: '稍作休息', desc: '飲料、零食、自由走動' },
+    { label: '第三輪交流題目', desc: '找一位最好奇的人展開深度對話', page: 'questions', round: 2 },
+    { label: '沉澱書寫與回饋', desc: '把今天的收穫安靜寫下來', page: 'reflect' },
+    { label: '自由交流與連結', desc: '交換聯絡方式、繼續好奇的話題' },
+    { label: '合照 & 感謝', desc: '留下今天的畫面', page: 'thanks' },
+  ];
+
+  const ROUNDS = [
+    { label: '第一輪', name: '同色組交流',
+      tag: '同色組交流 · 3–4 人一組',
+      title: '同色豐盛交流',
+      intro: '請看名牌右上角的顏色，找到同顏色的人組成一組。先簡單認識彼此，舒服分享就好。',
+      qs: ['怎麼稱呼我？我的背景或職業是？','我現在最在意的一個 AI 應用場景，或最想解決的問題是什麼？','用一句話說說你對這次發表的新模型，第一眼的直覺感受。'],
+      note: '💡 先聽，再說。讓每個人都有機會開口。'
+    },
+    { label: '第二輪', name: '模型觀察交流',
+      tag: '跨組深度對談 · 2–3 人一組',
+      title: '模型觀察交流',
+      intro: '請找一位還沒聊過的人，帶著你對模型的第一手觀察，展開一次更深的對話。',
+      qs: ['怎麼稱呼我？我平常怎麼使用 AI 工具？','Demo 裡最讓我驚豔、或最想深挖的一個功能或行為是什麼？','如果我把這個模型帶進我的工作或生活，我最想用來解決的一件事是？','「聆聽的每一人」—— 給對方的分享一個真實的回應，或提出你最好奇的問題。'],
+      note: '💡 聆聽者的好奇心，是分享者最好的禮物。'
+    },
+    { label: '第三輪', name: '自由流動交流',
+      tag: '自由流動 · 找最好奇的那個人',
+      title: '自由流動交流',
+      intro: '請找一位還沒聊過、但你有點好奇的人。可以是剛才聽到他分享有感，也可以只是直覺想更認識他。',
+      qs: ['怎麼稱呼我？','對今天的模型發表，我有什麼還沒說出口的懷疑、期待、或想法？','我覺得這個模型未來一年最可能改變的一個行業或日常場景是什麼？','「聆聽的人」—— 讚美對方分享裡，最讓你印象深刻的一個觀點或視角。'],
+      note: '💡 今天的對話裡，有沒有哪一句話，悄悄改變了你的某個想法？'
+    }
+  ];
+
+  // ── State ──
+  let currentStep = 0;   // 0-based, 0~8
+  let currentRound = 0;  // 0 = 未開放, 1~3 = 開放幾輪
+  let adminUnlocked = false;
+  const ADMIN_PASSWORD = '0000'; // 👈 改這裡
+
+  // ── Firebase listener ──
+  onValue(stateRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      currentStep = data.currentStep ?? 0;
+      currentRound = data.currentRound ?? 0;
+    } else {
+      // 初始化 Firebase 預設值
+      set(stateRef, { currentStep: 0, currentRound: 0 });
+    }
+    renderAll();
+    updateLiveStatus(true);
+  }, (err) => {
+    updateLiveStatus(false);
+  });
+
+  function updateLiveStatus(ok) {
+    const dot = document.getElementById('liveDot');
+    const txt = document.getElementById('statusText');
+    if (ok) { dot.className = 'dot live'; txt.textContent = '即時同步'; }
+    else     { dot.className = 'dot'; txt.textContent = '連線失敗'; }
+  }
+
+  // ── Render ──
+  function renderAll() {
+    renderStepList();
+    renderQuestions();
+    renderAdminControls();
+  }
+
+  function renderStepList() {
+    const list = document.getElementById('stepList');
+    list.innerHTML = STEPS.map((s, i) => {
+      const num = i + 1;
+      const isDone = i < currentStep;
+      const isCurrent = i === currentStep;
+      const isLocked = i > currentStep;
+      const isClickable = isCurrent && s.page;
+      let cls = 'step-item';
+      if (isDone) cls += ' is-done';
+      if (isCurrent) cls += ' is-current';
+      if (isLocked) cls += ' is-locked';
+      if (isClickable) cls += ' is-clickable';
+      const numCls = isDone ? 'done' : isCurrent ? 'current' : '';
+      const numContent = isDone ? '✓' : num;
+      const arrow = isClickable ? `<div class="step-arrow">›</div>` : '';
+      const onclick = isClickable ? `onclick="goTo('${s.page}')"` : '';
+      return `<li class="${cls}" ${onclick}>
+        <div class="step-num ${numCls}">${numContent}</div>
+        <div class="step-body">
+          <div class="step-label">${s.label}</div>
+          <div class="step-desc">${s.desc}</div>
+        </div>${arrow}
+      </li>`;
+    }).join('');
+
+    const banner = document.getElementById('journeyBannerText');
+    banner.textContent = `目前進行中：步驟 ${currentStep + 1} — ${STEPS[currentStep].label}`;
+  }
+
+  function renderQuestions() {
+    // Tabs
+    const tabs = document.getElementById('roundTabs');
+    tabs.innerHTML = ROUNDS.map((r, i) => {
+      const opened = i < currentRound;
+      const isCurrent = i === currentRound - 1;
+      let cls = 'round-tab';
+      if (i === 0 && currentRound > 0) cls += ' active'; // default show first unlocked
+      if (!opened) cls += ' locked';
+      const liveDot = isCurrent ? `<span class="tab-live"></span>` : '';
+      return `<button class="${cls}" data-round="${i}" onclick="switchRound(${i})">${r.label}${liveDot}</button>`;
+    }).join('');
+
+    // Content
+    const content = document.getElementById('roundContent');
+    if (currentRound === 0) {
+      content.innerHTML = `<div class="locked-notice"><div class="lock-icon">🔒</div>題目尚未開放<br>請等待主持人開啟第一輪</div>`;
+      document.getElementById('roundBannerText').textContent = '目前尚未開放任何輪次';
+      return;
+    }
+
+    const activeIdx = currentRound - 1;
+    document.getElementById('roundBannerText').textContent = `目前開放至：${ROUNDS[activeIdx].label} — ${ROUNDS[activeIdx].name}`;
+
+    content.innerHTML = ROUNDS.map((r, i) => {
+      const visible = i < currentRound;
+      if (!visible) return '';
+      return `<div id="rc-${i}" style="${i !== activeIdx ? 'display:none' : ''}">
+        <div class="q-card">
+          <div class="q-tag">${r.tag}</div>
+          <h3>${r.title}</h3>
+          <p class="q-intro">${r.intro}</p>
+          <ul class="q-list">${r.qs.map(q => `<li>${q}</li>`).join('')}</ul>
+          <div class="q-note">${r.note}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Fix tab active state
+    tabs.querySelectorAll('.round-tab').forEach((t, i) => {
+      t.classList.toggle('active', i === activeIdx);
+    });
+  }
+
+  function renderAdminControls() {
+    document.getElementById('ctrlStepNum').textContent = currentStep + 1;
+    document.getElementById('ctrlStepName').textContent = STEPS[currentStep].label;
+    document.getElementById('btnStepPrev').disabled = currentStep <= 0;
+    document.getElementById('btnStepNext').disabled = currentStep >= STEPS.length - 1;
+
+    document.getElementById('ctrlRoundNum').textContent = currentRound;
+    document.getElementById('ctrlRoundName').textContent = currentRound === 0 ? '尚未開放' : ROUNDS[currentRound - 1].name;
+    document.getElementById('btnRoundPrev').disabled = currentRound <= 0;
+    document.getElementById('btnRoundNext').disabled = currentRound >= ROUNDS.length;
+  }
+
+  // ── Admin actions ──
+  window.changeStep = function(delta) {
+    const next = currentStep + delta;
+    if (next < 0 || next >= STEPS.length) return;
+    saveState(next, currentRound);
+  };
+
+  window.changeRound = function(delta) {
+    const next = currentRound + delta;
+    if (next < 0 || next > ROUNDS.length) return;
+    saveState(currentStep, next);
+  };
+
+  function saveState(step, round) {
+    const status = document.getElementById('syncStatus');
+    status.textContent = '儲存中...'; status.className = 'sync-status saving';
+    set(stateRef, { currentStep: step, currentRound: round })
+      .then(() => { status.textContent = '✓ 已同步所有裝置'; status.className = 'sync-status saved'; })
+      .catch(() => { status.textContent = '⚠ 儲存失敗，請重試'; status.className = 'sync-status'; });
+  }
+
+  // ── Admin panel ──
+  window.openAdmin = function() {
+    document.getElementById('adminOverlay').classList.add('open');
+    if (!adminUnlocked) {
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwError').style.display = 'none';
+      setTimeout(() => document.getElementById('pwInput').focus(), 100);
+    }
+  };
+
+  window.closeAdmin = function() {
+    document.getElementById('adminOverlay').classList.remove('open');
+  };
+
+  window.overlayClick = function(e) {
+    if (e.target === document.getElementById('adminOverlay')) closeAdmin();
+  };
+
+  window.checkPw = function() {
+    const val = document.getElementById('pwInput').value;
+    if (val === ADMIN_PASSWORD) {
+      adminUnlocked = true;
+      document.getElementById('adminPw').style.display = 'none';
+      document.getElementById('adminControls').style.display = 'block';
+      document.getElementById('adminTitle').textContent = '主持人控制台 🎙';
+      renderAdminControls();
+    } else {
+      document.getElementById('pwError').style.display = 'block';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  };
+
+  // ── switchRound (tab click) ──
+  window.switchRound = function(idx) {
+    if (idx >= currentRound) return;
+    document.querySelectorAll('[id^="rc-"]').forEach(el => el.style.display = 'none');
+    const target = document.getElementById('rc-' + idx);
+    if (target) target.style.display = 'block';
+    document.querySelectorAll('.round-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  };
+
+  // ── Page nav ──
+  window.goTo = function(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+</script>
+</body>
+</html>
