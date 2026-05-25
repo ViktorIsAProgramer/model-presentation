@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>模型發表會交流小聚｜初星群 Starry Dawn Circle</title>
+  <meta name="description" content="一場讓開發者、研究者與使用者真實交流、共同見證新模型誕生的午後聚會。" />
+  <meta property="og:title" content="模型發表會交流小聚｜初星群 Starry Dawn Circle" />
+  <meta property="og:description" content="一場讓開發者、研究者與使用者真實交流、共同見證新模型誕生的午後聚會。" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta name="theme-color" content="#f6efe1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f8f3e8;
+      --cream-dark: #ede4d1;
+      --ink: #1c1710;
+      --ink-muted: #6b5f4a;
+      --ink-faint: #b0a48c;
+      --gold: #c4932a;
+      --gold-light: #f0dba8;
+      --white: #ffffff;
+      --border: rgba(28,23,16,0.12);
+      --border-strong: rgba(28,23,16,0.22);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(248,243,232,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 1.5rem;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 15px;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+    }
+    .nav-link {
+      font-size: 13px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 20px;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+    }
+    .nav-link:hover, .nav-link.active {
+      background: var(--cream-dark);
+      color: var(--ink);
+    }
+
+    /* ── Pages ── */
+    .page { display: none; padding-top: 52px; min-height: 100vh; animation: fadeUp 0.35s ease both; }
+    .page.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .container { max-width: 600px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Hero (Home) ── */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--white);
+      border: 0.5px solid var(--border-strong);
+      border-radius: 20px;
+      font-size: 12px;
+      padding: 5px 14px;
+      color: var(--ink-muted);
+      margin-bottom: 2rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 8vw, 52px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--ink-muted);
+      line-height: 1.75;
+      max-width: 380px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      letter-spacing: 0.01em;
+      transition: transform 0.15s, opacity 0.15s;
+      text-decoration: none;
+    }
+    .btn-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-cta:active { transform: translateY(0); }
+
+    .hero-divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 3rem 0 1.5rem;
+    }
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      text-align: center;
+    }
+    .hero-meta-item .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .hero-meta-item .val {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--ink);
+    }
+
+    /* ── Section Header ── */
+    .section-header {
+      padding: 3rem 0 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .section-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      margin-bottom: 0.5rem;
+    }
+    .section-header h2 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .section-header p {
+      font-size: 14px;
+      color: var(--ink-muted);
+      margin-top: 0.5rem;
+      font-weight: 300;
+    }
+
+    /* ── Step List ── */
+    .step-list { list-style: none; }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.12s;
+      border: 0.5px solid transparent;
+      margin-bottom: 4px;
+    }
+    .step-item:hover { background: var(--white); border-color: var(--border); }
+    .step-item.clickable-page:hover { background: rgba(196,147,42,0.06); border-color: rgba(196,147,42,0.2); }
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 0.5px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500;
+      color: var(--ink-muted);
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .step-num.done {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+      font-size: 13px;
+    }
+    .step-body { flex: 1; }
+    .step-label { font-size: 14px; color: var(--ink); line-height: 1.4; font-weight: 500; }
+    .step-desc { font-size: 12px; color: var(--ink-muted); margin-top: 3px; font-weight: 300; }
+    .step-arrow { color: var(--ink-faint); font-size: 16px; padding-top: 5px; flex-shrink: 0; }
+
+    /* ── Round Tabs ── */
+    .round-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .round-tab {
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      border: 0.5px solid var(--border-strong);
+      cursor: pointer;
+      background: transparent;
+      color: var(--ink-muted);
+      transition: all 0.15s;
+      font-family: var(--font-body);
+    }
+    .round-tab:hover { background: var(--white); color: var(--ink); }
+    .round-tab.active {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    /* ── Question Card ── */
+    .q-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .q-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+      margin-bottom: 0.75rem;
+    }
+    .q-card h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .q-card .q-intro {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-bottom: 1rem;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+    .q-list { list-style: none; counter-reset: q; }
+    .q-list li {
+      counter-increment: q;
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 0.5px solid var(--border);
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+    .q-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .q-list li::before {
+      content: counter(q);
+      font-size: 11px;
+      color: var(--ink-faint);
+      min-width: 16px;
+      padding-top: 3px;
+      font-weight: 400;
+    }
+    .q-note {
+      background: rgba(196,147,42,0.08);
+      border: 0.5px solid rgba(196,147,42,0.25);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--gold);
+      margin-top: 1rem;
+    }
+
+    /* ── Reflect ── */
+    .reflect-box {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin: 1.5rem 0;
+    }
+    .reflect-q {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      font-size: 15px;
+      color: var(--ink);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .reflect-q:last-child { border-bottom: none; }
+    .reflect-q strong { font-weight: 500; color: var(--ink); }
+
+    /* ── Buttons ── */
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--ink);
+      padding: 10px 22px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      border: 0.5px solid var(--border-strong);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+    }
+    .btn-outline:hover { background: var(--white); border-color: var(--ink); }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--ink-muted);
+      cursor: pointer;
+      padding: 0;
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+      margin-bottom: 0.5rem;
+    }
+    .btn-back:hover { color: var(--ink); }
+
+    /* ── Thank You ── */
+    .thank-hero {
+      text-align: center;
+      padding: 4rem 1.5rem 2.5rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .thank-hero h2 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .thank-hero p {
+      font-size: 15px;
+      color: var(--ink-muted);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+    .link-row { display: flex; flex-direction: column; gap: 8px; margin: 1.5rem 0; }
+    .link-card {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      background: var(--white);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .link-card:hover { border-color: var(--border-strong); background: var(--cream-dark); }
+    .link-card .icon { font-size: 18px; color: var(--ink-muted); }
+    .link-card .link-arrow { margin-left: auto; color: var(--ink-faint); font-size: 14px; }
+
+    /* ── Divider ── */
+    hr.divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-faint);
+      padding: 2rem 0 3rem;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      .nav-links .nav-link:not(.active) { display: none; }
+      .hero { padding: 3rem 1.25rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <span class="nav-brand">初星群 Starry Dawn Circle</span>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="goTo('home')">首頁</button>
+    <button class="nav-link" onclick="goTo('journey')">流程</button>
+    <button class="nav-link" onclick="goTo('questions')">題目</button>
+    <button class="nav-link" onclick="goTo('reflect')">沉澱</button>
+  </div>
+</nav>
+
+<!-- ── Page: Home ── -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">AI Product Launch · 2026</div>
+    <h1>模型發表會<br><em>交流小聚</em></h1>
+    <p class="hero-sub">
+      一場讓開發者、研究者與使用者<br>
+      真實交流、共同見證新模型誕生的午後聚會
+    </p>
+    <button class="btn-cta" onclick="goTo('journey')">進入今日流程 →</button>
+    <hr class="hero-divider" />
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="label">活動日期</span>
+        <span class="val">Today</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">交流輪次</span>
+        <span class="val">3 輪</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="label">主辦</span>
+        <span class="val">初星群</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Page: Journey ── -->
+<div id="page-journey" class="page">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-eyebrow">Today · Journey</p>
+      <h2>今日旅程指引</h2>
+      <p>跟著現場引導走就好。可點選步驟查看說明。</p>
+    </div>
+
+    <ul class="step-list">
+      <li class="step-item">
+        <div class="step-num done">✓</div>
+        <div class="step-body">
+          <div class="step-label">開場：為什麼我們今天要相聚</div>
+          <div class="step-desc">主持人說明今日模型發表的意義與活動目標</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-label">模型 Demo 展示</div>
+          <div class="step-desc">Live 展示新模型核心能力，親眼見證關鍵時刻</div>
+        </div>
+      </li>
+      <li class="step-item clickable-page" onclick="goTo('questions'); switchRound(0)">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-label">第一輪交流題目</div>
+          <div class="step-desc">同色組員 3–4 人，分享使用直覺與第一印象</div>
+        </div>
+        <div class="step-arrow">›</div>
+      </li>
+      <li class="step-item clickable-page" onclick="goTo('questions'); switchRound(1)">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-label">第二輪交流題目</div>
+          <div class="step-desc">跨組深度對談：技術觀察 × 應用場景</div>
+        </div>
+        <div class="step-arrow">›</div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-label">稍作休息</div>
+          <div class="step-desc">飲料、零食、自由走動，讓想法沉澱一下</div>
+        </div>
+      </li>
+      <li class="step-item clickable-page" onclick="goTo('questions'); switchRound(2)">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-label">第三輪交流題目</div>
+          <div class="step-desc">找一位最好奇的人，展開一次更深的對話</div>
+        </div>
+        <div class="step-arrow">›</div>
+      </li>
+      <li class="step-item clickable-page" onclick="goTo('reflect')">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <div class="step-label">沉澱書寫與回饋</div>
+          <div class="step-desc">把今天的收穫、啟發，安靜寫下來</div>
+        </div>
+        <div class="step-arrow">›</div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">8</div>
+        <div class="step-body">
+          <div class="step-label">自由交流與連結</div>
+          <div class="step-desc">交換聯絡方式、繼續好奇的話題</div>
+        </div>
+      </li>
+      <li class="step-item clickable-page" onclick="goTo('thanks')">
+        <div class="step-num">9</div>
+        <div class="step-body">
+          <div class="step-label">合照 & 感謝今日豐盛</div>
+          <div class="step-desc">留下今天的畫面，願想法持續在生活裡發酵</div>
+        </div>
+        <div class="step-arrow">›</div>
+      </li>
+    </ul>
+
+    <hr class="divider" />
+    <button class="btn-outline" onclick="goTo('questions')">查看交流題目 →</button>
+    <div class="footer-note">初星群 Starry Dawn Circle</div>
+  </div>
+</div>
+
+<!-- ── Page: Questions ── -->
+<div id="page-questions" class="page">
+  <div class="container">
+    <div class="section-header">
+      <button class="btn-back" onclick="goTo('journey')">← 回今日流程</button>
+      <p class="section-eyebrow">Connect · 交流題目</p>
+      <h2>今日交流題目</h2>
+      <p>題目依輪次逐步開放，請跟著主持人節奏進行。</p>
+    </div>
+
+    <div class="round-tabs">
+      <button class="round-tab active" onclick="switchRound(0)">第一輪</button>
+      <button class="round-tab" onclick="switchRound(1)">第二輪</button>
+      <button class="round-tab" onclick="switchRound(2)">第三輪</button>
+    </div>
+
+    <!-- Round 1 -->
+    <div id="round-0">
+      <div class="q-card">
+        <div class="q-tag">同色組交流 · 3–4 人一組</div>
+        <h3>同色豐盛交流</h3>
+        <p class="q-intro">請看名牌右上角的顏色，找到同顏色的人組成一組。先簡單認識彼此，舒服分享就好。</p>
+        <ul class="q-list">
+          <li>怎麼稱呼我？我的背景或職業是？</li>
+          <li>我現在最在意的一個 AI 應用場景，或最想解決的問題是什麼？</li>
+          <li>用一句話說說你對這次發表的新模型，第一眼的直覺感受。</li>
+        </ul>
+        <div class="q-note">💡 先聽，再說。讓每個人都有機會開口。</div>
+      </div>
+    </div>
+
+    <!-- Round 2 -->
+    <div id="round-1" style="display:none">
+      <div class="q-card">
+        <div class="q-tag">跨組深度對談 · 2–3 人一組</div>
+        <h3>模型觀察交流</h3>
+        <p class="q-intro">請找一位還沒聊過的人，帶著你對模型的第一手觀察，展開一次更深的對話。</p>
+        <ul class="q-list">
+          <li>怎麼稱呼我？我平常怎麼使用 AI 工具？</li>
+          <li>Demo 裡最讓我驚豔、或最想深挖的一個功能或行為是什麼？</li>
+          <li>如果我把這個模型帶進我的工作或生活，我最想用來解決的一件事是？</li>
+          <li>「聆聽的每一人」—— 給對方的分享一個真實的回應，或提出一個你最好奇的問題。</li>
+        </ul>
+        <div class="q-note">💡 聆聽者的好奇心，是分享者最好的禮物。</div>
+      </div>
+    </div>
+
+    <!-- Round 3 -->
+    <div id="round-2" style="display:none">
+      <div class="q-card">
+        <div class="q-tag">自由流動 · 找最好奇的那個人</div>
+        <h3>自由流動交流</h3>
+        <p class="q-intro">請找一位還沒聊過、但你有點好奇的人。可以是剛剛聽到他的分享有感，也可以只是直覺想更認識他。</p>
+        <ul class="q-list">
+          <li>怎麼稱呼我？</li>
+          <li>對今天的模型發表，我有什麼還沒說出口的懷疑、期待、或想法？</li>
+          <li>我覺得這個模型未來一年最可能改變的一個行業或日常場景是什麼？</li>
+          <li>「聆聽的人」—— 讚美對方分享裡，最讓你印象深刻的一個觀點或視角。</li>
+        </ul>
+        <div class="q-note">💡 今天的對話裡，有沒有哪一句話，悄悄改變了你的某個想法？</div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+    <button class="btn-outline" onclick="goTo('reflect')">進入沉澱書寫 →</button>
+    <p style="margin-top:0.75rem;">
+      <button class="btn-back" onclick="goTo('journey')">← 回今日流程</button>
+    </p>
+    <div class="footer-note">初星群 Starry Dawn Circle</div>
+  </div>
+</div>
+
+<!-- ── Page: Reflect ── -->
+<div id="page-reflect" class="page">
+  <div class="container">
+    <div class="section-header">
+      <button class="btn-back" onclick="goTo('journey')">← 回今日流程</button>
+      <p class="section-eyebrow">Reflect · 沉澱書寫</p>
+      <h2>把今天的收穫收回心裡</h2>
+      <p>先安靜停一下，讓剛才的對話慢慢落下來。</p>
+    </div>
+
+    <div class="reflect-box">
+      <div class="reflect-q">今天的交流裡，有沒有哪一句話、哪一個人、哪一個功能展示，讓你心裡有一點<strong>被觸動或改變</strong>？</div>
+      <div class="reflect-q">我想把今天的哪一個<strong>觀點或啟發</strong>，帶回去繼續想或繼續做？</div>
+      <div class="reflect-q">如果我<strong>明天就要用</strong>這個模型做一件事，我想做什麼？</div>
+    </div>
+
+    <hr class="divider" />
+    <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 400; margin-bottom: 0.5rem;">留下今天的回饋</h3>
+    <p style="font-size: 14px; color: var(--ink-muted); font-weight: 300; margin-bottom: 1.25rem; line-height: 1.7;">
+      你的感受會幫助團隊把下一次活動準備得更貼近大家，<br>也讓今天的豐盛被好好收起來。大約 2–3 分鐘。
+    </p>
+    <!-- 👇 把這裡的 href 換成你的 Google Form 連結 -->
+    <a class="btn-outline" href="https://forms.gle/XXXXXXXXXXXXXXXX" target="_blank">填寫今日回饋表單 →</a>
+
+    <hr class="divider" />
+    <button class="btn-outline" onclick="goTo('thanks')">前往感謝頁 →</button>
+    <div class="footer-note">初星群 Starry Dawn Circle</div>
+  </div>
+</div>
+
+<!-- ── Page: Thanks ── -->
+<div id="page-thanks" class="page">
+  <div class="thank-hero">
+    <h2>感謝你帶來的豐盛</h2>
+    <p>
+      謝謝你今天來到這裡，<br>
+      真誠分享，也好好聽見了彼此。<br><br>
+      願今天收到的想法與啟發，<br>
+      慢慢在你的工作與生活裡發酵。
+    </p>
+  </div>
+
+  <div class="container">
+    <hr class="divider" />
+    <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 400; margin-bottom: 0.5rem;">離開前的小邀請</h3>
+    <p style="font-size: 14px; color: var(--ink-muted); font-weight: 300; margin-bottom: 1.25rem;">不用寫得很完整，只要留下此刻最真實的一點感受，就已經很珍貴。</p>
+
+    <div class="link-row">
+      <!-- 👇 把各連結換成你的實際連結 -->
+      <a class="link-card" href="https://forms.gle/XXXXXXXXXXXXXXXX" target="_blank">
+        <span class="icon">📋</span>
+        填寫今日回饋表單
+        <span class="link-arrow">›</span>
+      </a>
+      <a class="link-card" href="#" target="_blank">
+        <span class="icon">✨</span>
+        加入初星群，讓連結繼續流動
+        <span class="link-arrow">›</span>
+      </a>
+      <a class="link-card" href="https://line.me/R/ti/p/@XXXXXXXX" target="_blank">
+        <span class="icon">💬</span>
+        加入官方 LINE，接收下次活動通知
+        <span class="link-arrow">›</span>
+      </a>
+    </div>
+
+    <hr class="divider" />
+    <div class="footer-note">
+      初星群 Starry Dawn Circle<br>
+      謝謝你一起讓豐盛流動。
+    </div>
+  </div>
+</div>
+
+<script>
+  const pages = ['home', 'journey', 'questions', 'reflect', 'thanks'];
+  const navMap = { home: 0, journey: 1, questions: 2, reflect: 3, thanks: -1 };
+
+  function goTo(id) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p).classList.remove('active');
+    });
+    document.getElementById('page-' + id).classList.add('active');
+
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(l => l.classList.remove('active'));
+    const idx = navMap[id];
+    if (idx >= 0 && navLinks[idx]) navLinks[idx].classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchRound(idx) {
+    for (let i = 0; i < 3; i++) {
+      document.getElementById('round-' + i).style.display = i === idx ? 'block' : 'none';
+    }
+    document.querySelectorAll('.round-tab').forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+    });
+  }
+</script>
+</body>
+</html>
