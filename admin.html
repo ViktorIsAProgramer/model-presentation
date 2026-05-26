@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>主持人控制台｜模型發表會</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f8f3e8; --cream-dark: #ede4d1; --ink: #1c1710; --ink-muted: #6b5f4a;
+      --ink-faint: #b0a48c; --white: #ffffff;
+      --border: rgba(28,23,16,0.12); --border-strong: rgba(28,23,16,0.22);
+      --green: #2a7a4a; --green-bg: rgba(42,122,74,0.08); --green-border: rgba(42,122,74,0.25);
+      --gold: #c4932a; --gold-bg: rgba(196,147,42,0.08); --gold-border: rgba(196,147,42,0.25);
+      --red: #c0392b; --red-bg: rgba(192,57,43,0.08); --red-border: rgba(192,57,43,0.25);
+      --radius: 12px; --radius-sm: 8px;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--cream); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    /* Lock screen */
+    .lock-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
+    .lock-screen { width: 100%; max-width: 360px; text-align: center; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .lock-screen h1 { font-family: var(--font-display); font-size: 28px; font-weight: 400; margin-bottom: 0.5rem; }
+    .lock-screen p { font-size: 14px; color: var(--ink-muted); margin-bottom: 2rem; font-weight: 300; line-height: 1.6; }
+    .pw-input { width: 100%; padding: 12px 16px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 18px; font-family: var(--font-body); background: var(--white); color: var(--ink); outline: none; text-align: center; letter-spacing: 0.25em; margin-bottom: 0.75rem; transition: border-color 0.15s; }
+    .pw-input:focus { border-color: var(--ink); }
+    .pw-error { font-size: 13px; color: var(--red); margin-bottom: 0.75rem; min-height: 20px; }
+    .btn-unlock { width: 100%; background: var(--ink); color: var(--cream); border: none; border-radius: var(--radius-sm); padding: 13px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: var(--font-body); transition: opacity 0.15s; }
+    .btn-unlock:hover { opacity: 0.85; }
+
+    /* Console layout */
+    .console { display: none; max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem 4rem; animation: fadeUp 0.3s ease; }
+    .console-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 0.75rem; }
+    .console-header h1 { font-family: var(--font-display); font-size: 24px; font-weight: 400; }
+    .sync-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-faint); background: var(--cream-dark); border-radius: 20px; padding: 5px 12px; }
+    .sync-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-faint); flex-shrink: 0; }
+    .sync-badge .dot.live { background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* Tabs */
+    .tab-nav { display: flex; gap: 4px; margin-bottom: 1.5rem; background: var(--cream-dark); border-radius: 10px; padding: 4px; }
+    .tab-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-body); background: transparent; color: var(--ink-muted); transition: all 0.15s; }
+    .tab-btn.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp 0.2s ease; }
+
+    /* Cards */
+    .card { background: var(--white); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+    .card-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 1rem; display: block; }
+
+    /* Step / Round controls */
+    .ctrl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media(max-width: 480px) { .ctrl-grid { grid-template-columns: 1fr; } }
+    .ctrl-box { background: var(--white); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .ctrl-box .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 0.75rem; display: block; }
+    .ctrl-val { text-align: center; padding: 0.5rem 0 0.75rem; }
+    .ctrl-val .big { font-family: var(--font-display); font-size: 40px; line-height: 1; }
+    .ctrl-val .of { font-size: 14px; color: var(--ink-muted); font-family: var(--font-body); }
+    .ctrl-val .name { font-size: 12px; color: var(--ink-muted); margin-top: 6px; font-weight: 300; min-height: 18px; line-height: 1.4; }
+    .ctrl-btns { display: flex; gap: 6px; }
+    .ctrl-btn { flex: 1; padding: 10px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--cream); color: var(--ink); font-size: 20px; cursor: pointer; transition: background 0.12s; font-family: var(--font-body); }
+    .ctrl-btn:hover:not(:disabled) { background: var(--cream-dark); }
+    .ctrl-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+    /* Step preview */
+    .step-preview { margin-top: 1rem; border-top: 0.5px solid var(--border); padding-top: 1rem; }
+    .step-row { display: flex; align-items: flex-start; gap: 8px; padding: 5px 8px; border-radius: 6px; font-size: 12px; color: var(--ink-faint); }
+    .step-row.is-done { color: var(--ink-muted); }
+    .step-row.is-current { background: var(--green-bg); color: var(--green); font-weight: 500; }
+    .step-row.is-next { color: var(--ink-muted); }
+    .step-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; margin-top: 5px; }
+
+    .sync-status { text-align: center; font-size: 12px; color: var(--ink-faint); padding: 0.5rem 0; min-height: 24px; }
+    .sync-status.saving { color: var(--gold); }
+    .sync-status.saved { color: var(--green); }
+    .sync-status.err { color: var(--red); }
+
+    /* CSV import */
+    .csv-steps { counter-reset: csvstep; margin-bottom: 1.25rem; }
+    .csv-step { counter-increment: csvstep; display: flex; gap: 12px; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; color: var(--ink-muted); line-height: 1.6; font-weight: 300; }
+    .csv-step:last-child { border-bottom: none; }
+    .csv-step::before { content: counter(csvstep); font-size: 11px; color: var(--ink-faint); min-width: 16px; padding-top: 2px; font-weight: 400; }
+
+    .col-map { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+    @media(max-width:480px) { .col-map { grid-template-columns: 1fr; } }
+    .col-map-item label { font-size: 12px; color: var(--ink-muted); display: block; margin-bottom: 4px; }
+    .col-select { width: 100%; padding: 8px 10px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-body); background: var(--cream); color: var(--ink); outline: none; cursor: pointer; }
+    .col-select:focus { border-color: var(--ink); }
+
+    .csv-textarea { width: 100%; height: 140px; padding: 10px 12px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 12px; font-family: 'Courier New', monospace; background: var(--cream); color: var(--ink); outline: none; resize: vertical; line-height: 1.5; margin-bottom: 0.75rem; }
+    .csv-textarea:focus { border-color: var(--ink); }
+
+    .csv-preview-wrap { margin-bottom: 1rem; }
+    .csv-preview-label { font-size: 12px; color: var(--ink-muted); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .preview-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .preview-table th { background: var(--cream-dark); padding: 6px 10px; text-align: left; color: var(--ink-muted); font-weight: 500; border-bottom: 0.5px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .preview-table td { padding: 7px 10px; border-bottom: 0.5px solid var(--border); color: var(--ink); }
+    .preview-table tr:last-child td { border-bottom: none; }
+    .preview-table .key-col { color: var(--ink-faint); font-size: 11px; font-family: monospace; }
+    .preview-table .badge { display: inline-block; background: var(--green-bg); border: 0.5px solid var(--green-border); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--green); }
+    .preview-table .badge-group { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold); }
+    .row-warn { background: var(--red-bg) !important; }
+    .row-warn td { color: var(--red) !important; }
+
+    .import-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .btn-parse { padding: 9px 18px; background: var(--cream-dark); color: var(--ink); border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-body); transition: background 0.12s; }
+    .btn-parse:hover { background: var(--cream); }
+    .btn-import { padding: 9px 20px; background: var(--ink); color: var(--cream); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-body); transition: opacity 0.15s; }
+    .btn-import:hover:not(:disabled) { opacity: 0.85; }
+    .btn-import:disabled { opacity: 0.35; cursor: not-allowed; }
+    .import-count { font-size: 12px; color: var(--ink-muted); }
+
+    .import-log { margin-top: 1rem; background: var(--cream-dark); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; font-family: monospace; line-height: 1.8; max-height: 160px; overflow-y: auto; display: none; }
+    .log-ok { color: var(--green); }
+    .log-err { color: var(--red); }
+    .log-info { color: var(--ink-muted); }
+
+    /* Single add */
+    .single-row { display: grid; grid-template-columns: 1fr 80px 100px 80px auto; gap: 8px; align-items: end; margin-bottom: 0.5rem; }
+    @media(max-width:540px) { .single-row { grid-template-columns: 1fr 1fr; } }
+    .single-row label { font-size: 11px; color: var(--ink-muted); display: block; margin-bottom: 3px; }
+    .att-input { width: 100%; padding: 9px 10px; border: 0.5px solid var(--border-strong); border-radius: var(--radius-sm); font-size: 13px; font-family: var(--font-body); background: var(--cream); color: var(--ink); outline: none; }
+    .att-input:focus { border-color: var(--ink); }
+    .btn-add-single { padding: 9px 14px; background: var(--ink); color: var(--cream); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font-body); white-space: nowrap; transition: opacity 0.15s; height: 38px; }
+    .btn-add-single:hover { opacity: 0.85; }
+    .att-msg { font-size: 12px; min-height: 18px; margin-top: 0.25rem; }
+    .att-msg.ok { color: var(--green); }
+    .att-msg.err { color: var(--red); }
+
+    hr.divider { border: none; border-top: 0.5px solid var(--border); margin: 1.5rem 0; }
+    .footer-note { text-align: center; font-size: 12px; color: var(--ink-faint); margin-top: 2rem; line-height: 1.8; }
+  </style>
+</head>
+<body>
+
+<!-- Lock screen -->
+<div class="lock-wrap" id="lockWrap">
+  <div class="lock-screen">
+    <h1>主持人控制台</h1>
+    <p>此頁面僅供主持人使用<br>請輸入主持人密碼以繼續</p>
+    <input class="pw-input" type="password" id="pwInput" placeholder="••••••" maxlength="30"
+      onkeydown="if(event.key==='Enter')unlock()" autofocus />
+    <p class="pw-error" id="pwError"></p>
+    <button class="btn-unlock" onclick="unlock()">解鎖控制台</button>
+  </div>
+</div>
+
+<!-- Console -->
+<div class="console" id="consoleView">
+  <div class="console-header">
+    <h1>🎙 主持人控制台</h1>
+    <div class="sync-badge">
+      <span class="dot" id="syncDot"></span>
+      <span id="syncText">連線中...</span>
+    </div>
+  </div>
+
+  <!-- Tab nav -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('flow')">流程控制</button>
+    <button class="tab-btn" onclick="switchTab('import')">匯入報名</button>
+    <button class="tab-btn" onclick="switchTab('single')">單筆新增</button>
+  </div>
+
+  <!-- Tab: 流程控制 -->
+  <div class="tab-panel active" id="tab-flow">
+    <div class="ctrl-grid">
+      <!-- Step -->
+      <div class="ctrl-box">
+        <span class="eyebrow">目前步驟</span>
+        <div class="ctrl-val">
+          <div><span class="big" id="stepNum">—</span> <span class="of">/ 9</span></div>
+          <div class="name" id="stepName"></div>
+        </div>
+        <div class="ctrl-btns">
+          <button class="ctrl-btn" id="btnStepPrev" onclick="changeStep(-1)">←</button>
+          <button class="ctrl-btn" id="btnStepNext" onclick="changeStep(1)">→</button>
+        </div>
+      </div>
+      <!-- Round -->
+      <div class="ctrl-box">
+        <span class="eyebrow">開放輪次</span>
+        <div class="ctrl-val">
+          <div><span class="big" id="roundNum">—</span> <span class="of">/ 3</span></div>
+          <div class="name" id="roundName"></div>
+        </div>
+        <div class="ctrl-btns">
+          <button class="ctrl-btn" id="btnRoundPrev" onclick="changeRound(-1)">←</button>
+          <button class="ctrl-btn" id="btnRoundNext" onclick="changeRound(1)">→</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step preview -->
+    <div class="card">
+      <span class="card-eyebrow">流程總覽</span>
+      <div id="stepPreview"></div>
+    </div>
+
+    <div class="sync-status" id="syncStatus">已連線</div>
+  </div>
+
+  <!-- Tab: 匯入報名 -->
+  <div class="tab-panel" id="tab-import">
+    <div class="card">
+      <span class="card-eyebrow">CSV 匯入說明</span>
+      <div class="csv-steps">
+        <div class="csv-step">從 Google 表單後台點「回應」→ 右上角試算表圖示 → 在 Google 試算表開啟</div>
+        <div class="csv-step">試算表上方選「檔案」→「下載」→「逗號分隔值（.csv）」</div>
+        <div class="csv-step">用文字編輯器或記事本打開 CSV，全選複製（Ctrl+A → Ctrl+C）</div>
+        <div class="csv-step">貼到下方文字框，選好欄位對應，點「解析預覽」確認無誤後匯入</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="card-eyebrow">欄位對應設定</span>
+      <p style="font-size:13px;color:var(--ink-muted);font-weight:300;margin-bottom:1rem;line-height:1.6;">
+        先貼入 CSV 內容，系統會自動讀取第一行的欄位名稱讓你選擇對應。<br>
+        電話欄會自動取後四碼。分組組別若表單沒有此欄位，選「無此欄位」即可。
+      </p>
+      <div class="col-map" id="colMap">
+        <div class="col-map-item">
+          <label>姓名欄位 *</label>
+          <select class="col-select" id="colName"><option value="">— 貼入 CSV 後自動填入 —</option></select>
+        </div>
+        <div class="col-map-item">
+          <label>電話欄位 *（9開頭）</label>
+          <select class="col-select" id="colPhone"><option value="">— 貼入 CSV 後自動填入 —</option></select>
+        </div>
+        <div class="col-map-item">
+          <label>報到編號欄位 *</label>
+          <select class="col-select" id="colCode"><option value="">— 貼入 CSV 後自動填入 —</option></select>
+        </div>
+        <div class="col-map-item">
+          <label>分組組別欄位（選填）</label>
+          <select class="col-select" id="colGroup"><option value="">無此欄位</option></select>
+        </div>
+      </div>
+
+      <textarea class="csv-textarea" id="csvInput"
+        placeholder="在此貼上 CSV 內容，例如：&#10;時間戳記,姓名,電話,聯繫信箱,報到編號,分組組別&#10;2026/5/26 10:00,王小明,0912345678,ming@example.com,A001,紅組&#10;2026/5/26 10:01,李小花,0923456789,hua@example.com,A002,"
+        oninput="onCsvInput()"></textarea>
+
+      <div class="import-bar">
+        <button class="btn-parse" onclick="parseCSV()">解析預覽</button>
+        <button class="btn-import" id="btnImport" onclick="doImport()" disabled>匯入 Firebase</button>
+        <span class="import-count" id="importCount"></span>
+      </div>
+    </div>
+
+    <!-- Preview table -->
+    <div class="card csv-preview-wrap" id="previewWrap" style="display:none">
+      <div class="csv-preview-label">
+        <span class="card-eyebrow" style="margin:0">預覽（前 5 筆）</span>
+        <span id="previewTotal" style="font-size:12px;color:var(--ink-muted)"></span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="preview-table" id="previewTable"></table>
+      </div>
+    </div>
+
+    <div class="import-log" id="importLog"></div>
+  </div>
+
+  <!-- Tab: 單筆新增 -->
+  <div class="tab-panel" id="tab-single">
+    <div class="card">
+      <span class="card-eyebrow">單筆新增報名者</span>
+      <p style="font-size:13px;color:var(--ink-muted);font-weight:300;margin-bottom:1.25rem;line-height:1.6;">
+        適合補登現場報名或臨時調整。電話請輸入完整號碼，系統自動取後四碼。
+      </p>
+      <div class="single-row">
+        <div>
+          <label>姓名 *</label>
+          <input class="att-input" type="text" id="sName" placeholder="王小明" maxlength="20" />
+        </div>
+        <div>
+          <label>電話 *</label>
+          <input class="att-input" type="tel" id="sPhone" placeholder="09xxxxxxxx" maxlength="10" inputmode="numeric" />
+        </div>
+        <div>
+          <label>報到編號 *</label>
+          <input class="att-input" type="text" id="sCode" placeholder="A001" maxlength="20" />
+        </div>
+        <div>
+          <label>分組（選填）</label>
+          <input class="att-input" type="text" id="sGroup" placeholder="紅組" maxlength="20" />
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button class="btn-add-single" onclick="addSingle()">新增</button>
+        </div>
+      </div>
+      <div class="att-msg" id="sMsg"></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    主持人控制台｜初星群 Starry Dawn Circle<br>
+    此頁面請勿分享給參與者
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdt0WK-CxGuezw6NB1glGFdWgy3KARVc0",
+    authDomain: "model-launch-event.firebaseapp.com",
+    databaseURL: "https://model-launch-event-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "model-launch-event",
+    storageBucket: "model-launch-event.firebasestorage.app",
+    messagingSenderId: "439342704129",
+    appId: "1:439342704129:web:ec9f32f2d606030d2a8200"
+  };
+
+  // ── 👇 改這裡 ──
+  const ADMIN_PASSWORD = '0000';
+
+  const STEPS = [
+    '開場：為什麼我們今天要相聚',
+    '模型 Demo 展示',
+    '第一輪交流題目',
+    '第二輪交流題目',
+    '稍作休息',
+    '第三輪交流題目',
+    '沉澱書寫與回饋',
+    '自由交流與連結',
+    '合照 & 感謝',
+  ];
+  const ROUND_NAMES = ['尚未開放', '第一輪：同色組交流', '第二輪：模型觀察交流', '第三輪：自由流動交流'];
+
+  let app, db, stateRef;
+  let currentStep = 0, currentRound = 0;
+  let parsedRows = [];
+
+  // ── Auth ──
+  window.unlock = function() {
+    const val = document.getElementById('pwInput').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('lockWrap').style.display = 'none';
+      document.getElementById('consoleView').style.display = 'block';
+      initFirebase();
+    } else {
+      document.getElementById('pwError').textContent = '密碼錯誤，請再試一次';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  };
+
+  function initFirebase() {
+    app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    stateRef = ref(db, 'eventState');
+    onValue(stateRef, (snap) => {
+      const d = snap.val();
+      if (d) { currentStep = d.currentStep ?? 0; currentRound = d.currentRound ?? 0; }
+      renderControls();
+      document.getElementById('syncDot').className = 'dot live';
+      document.getElementById('syncText').textContent = '即時同步';
+    }, () => {
+      document.getElementById('syncDot').className = 'dot';
+      document.getElementById('syncText').textContent = '連線失敗';
+    });
+  }
+
+  // ── Flow controls ──
+  function renderControls() {
+    document.getElementById('stepNum').textContent = currentStep + 1;
+    document.getElementById('stepName').textContent = STEPS[currentStep];
+    document.getElementById('btnStepPrev').disabled = currentStep <= 0;
+    document.getElementById('btnStepNext').disabled = currentStep >= STEPS.length - 1;
+    document.getElementById('roundNum').textContent = currentRound;
+    document.getElementById('roundName').textContent = ROUND_NAMES[currentRound];
+    document.getElementById('btnRoundPrev').disabled = currentRound <= 0;
+    document.getElementById('btnRoundNext').disabled = currentRound >= 3;
+
+    const preview = document.getElementById('stepPreview');
+    preview.innerHTML = STEPS.map((s, i) => {
+      const isDone = i < currentStep, isCurrent = i === currentStep;
+      let cls = 'step-row';
+      if (isDone) cls += ' is-done';
+      else if (isCurrent) cls += ' is-current';
+      else cls += ' is-next';
+      return `<div class="${cls}"><span class="step-dot"></span>${i+1}. ${s}</div>`;
+    }).join('');
+  }
+
+  function saveState(step, round) {
+    const el = document.getElementById('syncStatus');
+    el.textContent = '儲存中...'; el.className = 'sync-status saving';
+    set(stateRef, { currentStep: step, currentRound: round })
+      .then(() => { el.textContent = '✓ 已同步所有裝置'; el.className = 'sync-status saved'; })
+      .catch(() => { el.textContent = '⚠ 儲存失敗'; el.className = 'sync-status err'; });
+  }
+
+  window.changeStep = (d) => { const n = currentStep + d; if (n >= 0 && n < STEPS.length) saveState(n, currentRound); };
+  window.changeRound = (d) => { const n = currentRound + d; if (n >= 0 && n <= 3) saveState(currentStep, n); };
+
+  // ── Tab ──
+  window.switchTab = function(id) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', ['flow','import','single'][i] === id));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+  };
+
+  // ── CSV parse ──
+  function parseCSVLine(line) {
+    const result = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+      else { cur += c; }
+    }
+    result.push(cur.trim());
+    return result;
+  }
+
+  window.onCsvInput = function() {
+    const raw = document.getElementById('csvInput').value.trim();
+    if (!raw) return;
+    const lines = raw.split('\n').filter(l => l.trim());
+    if (!lines.length) return;
+    const headers = parseCSVLine(lines[0]);
+    ['colName','colPhone','colCode','colGroup'].forEach(id => {
+      const sel = document.getElementById(id);
+      const prev = sel.value;
+      sel.innerHTML = id === 'colGroup'
+        ? '<option value="">無此欄位</option>'
+        : '<option value="">— 請選擇 —</option>';
+      headers.forEach((h, i) => {
+        const opt = document.createElement('option');
+        opt.value = i; opt.textContent = `${i+1}. ${h}`;
+        sel.appendChild(opt);
+      });
+      // Auto-detect
+      headers.forEach((h, i) => {
+        const hl = h.toLowerCase();
+        if (id === 'colName' && (hl.includes('姓名') || hl.includes('name'))) sel.value = i;
+        if (id === 'colPhone' && (hl.includes('電話') || hl.includes('手機') || hl.includes('phone'))) sel.value = i;
+        if (id === 'colCode' && (hl.includes('報到') || hl.includes('編號') || hl.includes('code'))) sel.value = i;
+        if (id === 'colGroup' && (hl.includes('分組') || hl.includes('組別') || hl.includes('group'))) sel.value = i;
+      });
+      if (prev) sel.value = prev;
+    });
+  };
+
+  window.parseCSV = function() {
+    const raw = document.getElementById('csvInput').value.trim();
+    const colName = document.getElementById('colName').value;
+    const colPhone = document.getElementById('colPhone').value;
+    const colCode = document.getElementById('colCode').value;
+    const colGroup = document.getElementById('colGroup').value;
+
+    if (!raw) { alert('請先貼入 CSV 內容'); return; }
+    if (colName === '' || colPhone === '' || colCode === '') { alert('請選擇姓名、電話、報到編號的欄位對應'); return; }
+
+    const lines = raw.split('\n').filter(l => l.trim());
+    const dataLines = lines.slice(1);
+    parsedRows = [];
+    const seen = new Set();
+
+    dataLines.forEach((line, idx) => {
+      const cols = parseCSVLine(line);
+      const name = (cols[colName] || '').trim();
+      const phone = (cols[colPhone] || '').trim().replace(/\D/g, '');
+      const code = (cols[colCode] || '').trim();
+      const group = colGroup !== '' ? (cols[colGroup] || '').trim() : '';
+
+      let warn = '';
+      if (!name) warn = '姓名空白';
+      else if (phone.length < 4) warn = '電話格式錯誤';
+      else if (!code) warn = '報到編號空白';
+
+      const last4 = phone.slice(-4);
+      const key = `${name}_${last4}`;
+      if (seen.has(key)) warn = '重複資料';
+      else seen.add(key);
+
+      parsedRows.push({ name, phone, last4, code, group, key, warn, lineNum: idx + 2 });
+    });
+
+    renderPreview();
+    document.getElementById('btnImport').disabled = parsedRows.filter(r => !r.warn).length === 0;
+    document.getElementById('importCount').textContent =
+      `共 ${parsedRows.length} 筆，${parsedRows.filter(r=>r.warn).length} 筆有問題`;
+  };
+
+  function renderPreview() {
+    const wrap = document.getElementById('previewWrap');
+    const table = document.getElementById('previewTable');
+    const good = parsedRows.filter(r => !r.warn);
+    wrap.style.display = 'block';
+    document.getElementById('previewTotal').textContent = `共 ${parsedRows.length} 筆（有問題 ${parsedRows.filter(r=>r.warn).length} 筆）`;
+
+    const preview5 = parsedRows.slice(0, 5);
+    const hasGroup = parsedRows.some(r => r.group);
+    table.innerHTML = `
+      <thead><tr>
+        <th>#</th><th>姓名</th><th>後四碼</th><th>編號</th>
+        ${hasGroup ? '<th>分組</th>' : ''}
+        <th>Firebase Key</th><th>狀態</th>
+      </tr></thead>
+      <tbody>
+        ${preview5.map(r => `
+          <tr class="${r.warn ? 'row-warn' : ''}">
+            <td>${r.lineNum}</td>
+            <td>${r.name || '—'}</td>
+            <td>${r.last4 || '—'}</td>
+            <td><span class="badge">${r.code || '—'}</span></td>
+            ${hasGroup ? `<td>${r.group ? `<span class="badge badge-group">${r.group}</span>` : '—'}</td>` : ''}
+            <td class="key-col">${r.key}</td>
+            <td>${r.warn ? `⚠ ${r.warn}` : '✓'}</td>
+          </tr>
+        `).join('')}
+      </tbody>`;
+    if (parsedRows.length > 5) {
+      const more = document.createElement('div');
+      more.style.cssText = 'font-size:12px;color:var(--ink-faint);padding:8px 0;';
+      more.textContent = `...還有 ${parsedRows.length - 5} 筆（匯入時全部處理）`;
+      wrap.appendChild(more);
+    }
+  }
+
+  window.doImport = async function() {
+    const good = parsedRows.filter(r => !r.warn);
+    if (!good.length) { alert('沒有可匯入的資料'); return; }
+    if (!confirm(`確定匯入 ${good.length} 筆資料到 Firebase？`)) return;
+
+    const log = document.getElementById('importLog');
+    log.style.display = 'block';
+    log.innerHTML = `<span class="log-info">開始匯入 ${good.length} 筆...</span>\n`;
+
+    document.getElementById('btnImport').disabled = true;
+    let ok = 0, fail = 0;
+
+    for (const row of good) {
+      try {
+        const data = { code: row.code };
+        if (row.group) data.group = row.group;
+        await set(ref(db, `attendees/${row.key}`), data);
+        log.innerHTML += `<span class="log-ok">✓ ${row.key} → ${row.code}${row.group ? ' / ' + row.group : ''}</span>\n`;
+        ok++;
+      } catch(e) {
+        log.innerHTML += `<span class="log-err">✗ ${row.key} 失敗：${e.message}</span>\n`;
+        fail++;
+      }
+      log.scrollTop = log.scrollHeight;
+    }
+
+    log.innerHTML += `\n<span class="log-info">完成：${ok} 成功，${fail} 失敗</span>`;
+    document.getElementById('importCount').textContent = `匯入完成：${ok} 成功 / ${fail} 失敗`;
+    document.getElementById('btnImport').disabled = false;
+  };
+
+  // ── Single add ──
+  window.addSingle = async function() {
+    const name = document.getElementById('sName').value.trim();
+    const phone = document.getElementById('sPhone').value.trim().replace(/\D/g, '');
+    const code = document.getElementById('sCode').value.trim();
+    const group = document.getElementById('sGroup').value.trim();
+    const msg = document.getElementById('sMsg');
+
+    if (!name || phone.length < 4 || !code) {
+      msg.textContent = '請填寫姓名、電話（至少4碼）、報到編號'; msg.className = 'att-msg err'; return;
+    }
+
+    const last4 = phone.slice(-4);
+    const key = `${name}_${last4}`;
+    const data = { code };
+    if (group) data.group = group;
+
+    try {
+      await set(ref(db, `attendees/${key}`), data);
+      msg.textContent = `✓ 已新增：${name}（後四碼 ${last4}）→ ${code}${group ? ' / ' + group : ''}`;
+      msg.className = 'att-msg ok';
+      ['sName','sPhone','sCode','sGroup'].forEach(id => document.getElementById(id).value = '');
+    } catch(e) {
+      msg.textContent = `新增失敗：${e.message}`; msg.className = 'att-msg err';
+    }
+  };
+</script>
+</body>
+</html>
